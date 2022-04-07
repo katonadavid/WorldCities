@@ -35,7 +35,7 @@ export class CitiesComponent implements OnInit {
   }
 
   loadData(query?: string) {
-    var pageEvent = new PageEvent();
+    const pageEvent = new PageEvent();
     pageEvent.pageIndex = this.defaultPageIndex;
     pageEvent.pageSize = this.defaultPageSize;
     this.filterQuery = query;
@@ -44,8 +44,8 @@ export class CitiesComponent implements OnInit {
 
 
   getData(event: PageEvent) {
-    var url = environment.baseUrl + 'api/Cities';
-    var params = new HttpParams()
+    const url = environment.baseUrl + 'api/Cities';
+    let params = new HttpParams()
       .set("pageIndex", event.pageIndex.toString())
       .set("pageSize", event.pageSize.toString())
       .set("sortColumn", (this.sort)
