@@ -66,8 +66,9 @@ namespace WorldCitiesAPI.Data
                 && !string.IsNullOrEmpty(filterQuery)
                 && IsValidProperty(filterColumn))
             {
+
                 source = source.Where(
-                    string.Format("{0}.StartsWith(@0)",
+                    string.Format("{0}.Contains(@0)",
                     filterColumn),
                     filterQuery);
             }

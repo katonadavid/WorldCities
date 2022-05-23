@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { environment } from './../../environments/environment';
 import { City } from './city';
 import { Country } from '../countries/country';
@@ -30,10 +30,10 @@ export class CityEditComponent implements OnInit {
 
   ngOnInit() {
     this.form = new FormGroup({
-      name: new FormControl(''),
-      lat: new FormControl(''),
-      lon: new FormControl(''),
-      countryId: new FormControl(''),
+      name: new FormControl('', Validators.required),
+      lat: new FormControl('', Validators.required),
+      lon: new FormControl('', Validators.required),
+      countryId: new FormControl('', Validators.required),
     });
     this.loadData();
   }
@@ -48,14 +48,15 @@ export class CityEditComponent implements OnInit {
     if (this.id) {
       // fetch the city from the server
       const url = environment.baseUrl + 'api/Cities/' + this.id;
-      this.http.get<City>(url).subscribe(
-        (result) => {
-          this.city = result;
-          this.title = 'Edit - ' + this.city.name;
-          // update the form with the city value
-          this.form.patchValue(this.city);
-        },
-        (error) => console.error(error)
+      this.http.get<City>(url).subscribe({
+          next: (result) => {
+            this.city = result;
+            this.title = 'Edit - ' + this.city.name;
+            // update the form with the city value
+            this.form.patchValue(this.city);
+          },
+          error: (error) => console.error(error)
+        }
       );
     } else {
       this.title = 'Create a new City';

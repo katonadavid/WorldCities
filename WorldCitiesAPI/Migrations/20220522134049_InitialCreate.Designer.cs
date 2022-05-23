@@ -8,11 +8,11 @@ using WorldCitiesAPI.Data;
 
 #nullable disable
 
-namespace WorldCitiesAPI.Data.Migrations
+namespace WorldCitiesAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211118040102_Initial")]
-    partial class Initial
+    [Migration("20220522134049_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,13 +42,19 @@ namespace WorldCitiesAPI.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("Cities", (string)null);
+                    b.HasIndex("Lat");
+
+                    b.HasIndex("Lon");
+
+                    b.HasIndex("Name");
+
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("WorldCitiesAPI.Data.Models.Country", b =>
@@ -61,19 +67,25 @@ namespace WorldCitiesAPI.Data.Migrations
 
                     b.Property<string>("ISO2")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ISO3")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries", (string)null);
+                    b.HasIndex("ISO2");
+
+                    b.HasIndex("ISO3");
+
+                    b.HasIndex("Name");
+
+                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("WorldCitiesAPI.Data.Models.City", b =>

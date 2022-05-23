@@ -2,9 +2,9 @@
 
 #nullable disable
 
-namespace WorldCitiesAPI.Data.Migrations
+namespace WorldCitiesAPI.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,9 +14,9 @@ namespace WorldCitiesAPI.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ISO2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ISO3 = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ISO2 = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ISO3 = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,7 +29,7 @@ namespace WorldCitiesAPI.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Lat = table.Column<decimal>(type: "decimal(7,4)", nullable: false),
                     Lon = table.Column<decimal>(type: "decimal(7,4)", nullable: false),
                     CountryId = table.Column<int>(type: "int", nullable: false)
@@ -49,6 +49,36 @@ namespace WorldCitiesAPI.Data.Migrations
                 name: "IX_Cities_CountryId",
                 table: "Cities",
                 column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cities_Lat",
+                table: "Cities",
+                column: "Lat");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cities_Lon",
+                table: "Cities",
+                column: "Lon");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cities_Name",
+                table: "Cities",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Countries_ISO2",
+                table: "Countries",
+                column: "ISO2");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Countries_ISO3",
+                table: "Countries",
+                column: "ISO3");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Countries_Name",
+                table: "Countries",
+                column: "Name");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
