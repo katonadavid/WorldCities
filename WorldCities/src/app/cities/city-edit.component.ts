@@ -5,6 +5,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { environment } from './../../environments/environment';
 import { City } from './city';
 import { Country } from '../countries/country';
+import { Observable } from 'rxjs';
+import { CityDuplicateValidator } from '../services/city-duplicate-validator';
 @Component({
   selector: 'app-city-edit',
   templateUrl: './city-edit.component.html',
@@ -16,7 +18,7 @@ export class CityEditComponent implements OnInit {
   // the form model
   form!: FormGroup;
   // the city object to edit or create
-  city?: City;
+  city: City;
 
   id?: number;
 
@@ -25,7 +27,8 @@ export class CityEditComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private cityDuplicateValidator: CityDuplicateValidator
   ) {}
 
   ngOnInit() {
@@ -34,7 +37,7 @@ export class CityEditComponent implements OnInit {
       lat: new FormControl('', Validators.required),
       lon: new FormControl('', Validators.required),
       countryId: new FormControl('', Validators.required),
-    });
+    }, null, this.cityDuplicateValidator.validate.bind(this.cityDuplicateValidator));
     this.loadData();
   }
 
@@ -77,6 +80,23 @@ export class CityEditComponent implements OnInit {
       },
       error: (error) => console.error(error),
     });
+  }
+
+  isDuplicateCity(): Observable<boolean> {
+    const city = this.createCityModel();
+    const url = environment.baseUrl + 'api/Cities/';
+    return this.http.post<boolean>(url + 'Validate', city)
+  }
+
+  createCityModel(): City {
+    const city = this.id ? this.city : {} as City;
+    if (city) {
+      city.name = this.form.controls['name'].value;
+      city.lat = +this.form.controls['lat'].value;
+      city.lon = +this.form.controls['lon'].value;
+      city.countryId = +this.form.controls['countryId'].value;
+    }
+    return city;
   }
 
   onSubmit() {

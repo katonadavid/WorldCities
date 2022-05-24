@@ -99,6 +99,24 @@ namespace WorldCitiesAPI.Controllers
             return CreatedAtAction("GetCity", new { id = city.Id }, city);
         }
 
+        [HttpPost("Validate")]
+        public async Task<ActionResult<bool>> ValidateCityUnique(City city)
+        {
+            var existingCityQuery = _context.Cities.Where(c =>
+            c.Name == city.Name &&
+            c.Lat == city.Lat &&
+            c.Lon == city.Lon);
+
+            if (city.Id != 0)
+            {
+                existingCityQuery = existingCityQuery.Where(c => c.Id != city.Id);
+            }
+
+            var existingCity = await existingCityQuery.FirstOrDefaultAsync() != null;
+
+            return Ok(existingCity);
+        }
+
         // DELETE: api/Cities/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCity(int id)
